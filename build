@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+
+clj -m cljs.main --target node --output-to ice-plugin.js -c ice.core
