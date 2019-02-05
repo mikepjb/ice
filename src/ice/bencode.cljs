@@ -20,7 +20,7 @@
           (partition 2 seq)))
 
 (defn decode [bstr & [col]]
-  (if (is-map? bstr) (decode (remove-map-marker bstr))
+  (if (is-map? bstr) (decode (remove-map-marker bstr) col)
     (let [message (if col col [])]
       (if (not (empty? bstr))
         (let [[length remaining-bstr] (str/split bstr #":" 2)]
