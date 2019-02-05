@@ -2,3 +2,4 @@ out
 .cpcache
 node.log
 .nrepl-history
+cljs-test-runner-out/
