@@ -5,4 +5,7 @@
   {:extra-paths ["test"]
    :extra-deps
    {olical/cljs-test-runner {:mvn/version "0.1.1"}}
-   :main-opts ["-m" "cljs-test-runner.main"]}}}
+   :main-opts ["-m" "cljs-test-runner.main"]}
+  :repl
+  {:extra-deps {nrepl/nrepl {:mvn/version "0.5.3"}}
+   :main-opts ["-m" "nrepl.cmdline"]}}}

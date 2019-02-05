@@ -1,5 +1,6 @@
 out
 .cpcache
 node.log
+.nrepl-port
 .nrepl-history
 cljs-test-runner-out/

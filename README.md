@@ -15,4 +15,6 @@ Verify the plugin is loaded my using the `:SetMyLine` function.
 
 ## Run Tests
 
-`clj -Atest`
+Start a repl with: `clj -Arepl`
+
+Run test suite with: `clj -Atest`
