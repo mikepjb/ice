@@ -1,8 +1,5 @@
 (ns ice.core)
 
-(println "HELLO?")
-(.log js/console "Buffer written!")
-
 (defn onBufWrite [] (.log js/console "Buffer written!"))
 
 (defn setup [& _]
