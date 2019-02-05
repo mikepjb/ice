@@ -1,5 +1,5 @@
 {:deps {org.clojure/clojurescript {:mvn/version "1.10.516"}}
-
+ :src ["src"]
  :aliases
  {:test
   {:extra-paths ["test"]
