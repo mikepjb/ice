@@ -5,3 +5,4 @@ node.log
 .nrepl-history
 cljs-test-runner-out/
 ice-plugin.js
+.cljs_node_repl/

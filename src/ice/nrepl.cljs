@@ -1,14 +1,16 @@
 (ns ice.nrepl
-  ;; (:require ["net"] :as net)
-  ;; (:require js/net :as net)
-  ;; (:require [net :as net])
-  (:require net)
-  )
+  (:require ["net" :as net])
+  (:refer-clojure :exclude [clone]))
 
 (defn connect
   "returns a connection map, containing port and session id to communicate with a nREPL."
   [port]
   {:port port :session-id "x"})
+
+(defn clone
+  "To start an nREPL connection, send a clone request and return the session id"
+  []
+  {:session-id "x"})
 
 ;; (defn net-example []
 ;;   (.createServer net (fn [socket]
@@ -18,7 +20,7 @@
 (defn net-example []
   ;; (def require (js* "require"))
   ;; (def net (require "net"))
-  (println "running net-example")
+  ;; (def net ((js* "require") "net")) ;; require the Node.js network module
 
   (def client (new net/Socket))
 
