@@ -4,3 +4,4 @@ node.log
 .nrepl-port
 .nrepl-history
 cljs-test-runner-out/
+ice-plugin.js
