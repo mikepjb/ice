@@ -3,10 +3,14 @@
 cd $(dirname $BASH_SOURCE)
 BASE=$(pwd)
 
-clj -m cljs.main --target node --output-to ice-plugin.js -c ice.core
+clj -m cljs.main --target node --output-to ice-plugin.js -O simple -c ice.core
 
 mkdir -p ~/.config/nvim/rplugin/node
 ln -sfv $BASE/ice-plugin.js ~/.config/nvim/rplugin/node/ice-plugin.js
 # ln -sfv $BASE/ice-plugin.js ~/.config/nvim/rplugin/node/index.js
 
-ln -sfv $BASE/out ~/.config/nvim/rplugin/node/out
+NVIM_NODE_LOG_FILE=node.log nvim +UpdateRemotePlugins +qall
+
+cat node.log
+
+
