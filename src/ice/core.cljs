@@ -1,4 +1,5 @@
-(ns ice.core)
+(ns ice.core
+  (:require [ice.nrepl :as nrepl]))
 
 (defn onBufWrite [] (.log js/console "Buffer written!"))
 
@@ -13,6 +14,8 @@
         plugin
         "SetMyLine"
         #js [(.. plugin -nvim -buffer) setLine])
-      (.registerAutocmd plugin "BufWritePre" onBufWrite #js {:pattern "*"}))))
+      (.registerAutocmd plugin "BufWritePre" onBufWrite #js {:pattern "*"})))
+  (nrepl/net-example)
+  )
 
 (set! *main-cli-fn* setup)

@@ -16,15 +16,17 @@
 
 
 (defn net-example []
+  ;; (def require (js* "require"))
   ;; (def net (require "net"))
+  (println "running net-example")
 
-  (def client (new (.Socket net)))
+  (def client (new net/Socket))
 
   (def message "nothing")
 
   (.connect
     client
-    34633
+    9999
     "127.0.0.1"
     (fn []
       (println "Connected")
@@ -36,6 +38,7 @@
     (fn [data]
       (def message data)
       (println (str "Received: " data))
+      ;; d11:new-session36:2268a436-b946-44a2-b6d3-e0c759f42f067:session36:3ef758ee-2c4c-4ebd-9b0e-8d13b85cc2f46:statusl4:doneee
       (.destroy client)))
 
   (.on client "close" (fn [] (println "Connection closed")))

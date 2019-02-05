@@ -6,6 +6,9 @@
    :extra-deps
    {olical/cljs-test-runner {:mvn/version "0.1.1"}}
    :main-opts ["-m" "cljs-test-runner.main"]}
+  :cljs-repl
+  {:extra-deps {nrepl/nrepl {:mvn/version "0.4.5"}
+                cider/piggieback {:mvn/version "0.3.10"}}}
   :repl
   {:extra-deps {nrepl/nrepl {:mvn/version "0.5.3"}}
    :main-opts ["-m" "nrepl.cmdline"]}}}
