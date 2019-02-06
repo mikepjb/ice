@@ -1,6 +1,7 @@
 (ns ice.nrepl
   (:require ["net" :as net]
-            [ice.bencode :as bencode])
+            [ice.bencode :as bencode]
+            [cljs.pprint :as pprint])
   (:refer-clojure :exclude [clone]))
 
 (defn connect
@@ -13,10 +14,10 @@
   []
   {:session-id "x"})
 
+(def log (atom []))
+
 (defn net-example []
   (def client (new net/Socket))
-
-  (def message "nothing")
 
   (.connect
     client
@@ -29,11 +30,36 @@
   (.on
     client
     "data"
-    (fn [data]
-      (def message data)
-      ;; (println (bencode/decode data)) ;; doesn't work due to failing test
+    (fn [response]
+      (swap! log conj (bencode/decode (.toString response)))
+      (println (bencode/decode (.toString response)))
       (.destroy client)))
 
   (.on client "close" (fn [] (println "Connection closed")))
 
-  message)
+  (when (not= [] @log)
+    (println "heeeeyyy")
+    (def client (new net/Socket))
+
+    (.connect
+      client
+      9999
+      "127.0.0.1"
+      (fn []
+        (println "Connected")
+        (let [last-message (last @log)
+              payload (str "d2:op4:eval4:code33:(def ice.bencode/special-value 5)e7:session36:" (:new-session last-message) "e")]
+          (println payload)
+          (.write client payload))))
+
+    (.on
+      client
+      "data"
+      (fn [response]
+        (swap! log conj (bencode/decode (.toString response)))
+        (println (bencode/decode (.toString response)))
+        (.destroy client)))
+
+    (.on client "close" (fn [] (println "Connection closed")))
+    )
+  )
