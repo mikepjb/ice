@@ -14,52 +14,38 @@
   []
   {:session-id "x"})
 
+(def client (new net/Socket))
+
 (def log (atom []))
 
 (defn net-example []
-  (def client (new net/Socket))
-
   (.connect
     client
     9999
     "127.0.0.1"
     (fn []
-      (println "Connected")
-      (.write client "d2:op5:clonee")))
+      (.write client "d2:op5:clonee")
+      (println "Sending code for evaluation")
+      (when (contains? (last @log) :status)
+        (println "last log contains a status key.")
+        (let [last-message (last @log)
+              payload (str "d2:op4:eval4:code31:(def boot.user/special-value 5)7:session36:" (:new-session last-message) "e")]
+          (println payload)
+          (.write client payload)))))
 
   (.on
     client
     "data"
     (fn [response]
+      (println "on method call.")
       (swap! log conj (bencode/decode (.toString response)))
       (println (bencode/decode (.toString response)))
-      (.destroy client)))
+      ;; (.destroy client)
+      ))
 
   (.on client "close" (fn [] (println "Connection closed")))
 
-  (when (not= [] @log)
-    (println "heeeeyyy")
-    (def client (new net/Socket))
+  (when (contains? (last @log) :status)
+    (.destroy client))
 
-    (.connect
-      client
-      9999
-      "127.0.0.1"
-      (fn []
-        (println "Connected")
-        (let [last-message (last @log)
-              payload (str "d2:op4:eval4:code33:(def ice.bencode/special-value 5)e7:session36:" (:new-session last-message) "e")]
-          (println payload)
-          (.write client payload))))
-
-    (.on
-      client
-      "data"
-      (fn [response]
-        (swap! log conj (bencode/decode (.toString response)))
-        (println (bencode/decode (.toString response)))
-        (.destroy client)))
-
-    (.on client "close" (fn [] (println "Connection closed")))
-    )
   )
