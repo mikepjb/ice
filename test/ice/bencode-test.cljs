@@ -21,6 +21,6 @@
 
 (deftest encode
   (testing "transforms message seq into bencoded string"
-    (is (= (bencode/encode [{:ns "cljs.user"}]) "d2:ns9:cljs.user"))
+    (is (= (bencode/encode [{:ns "cljs.user"}]) "d2:ns9:cljs.usere"))
     ;; (is (= (bencode/encode [{:ns "cljs.user" :eval "(def x 3)" :session "a-session-id"}])))
     ))

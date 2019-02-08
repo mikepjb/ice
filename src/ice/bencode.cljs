@@ -34,4 +34,6 @@
 (defn encode 
   "transforms message seq into bencoded string"
   [message]
-  "d2:ns9:cljs.user")
+  (let [string-seq (map name (flatten (vec (first message))))
+        bstr (reduce (fn [map-str x] (str map-str (str (count x) ":" x))) "" string-seq)]
+    (str "d" bstr "e")))
