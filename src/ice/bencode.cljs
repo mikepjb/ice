@@ -30,3 +30,8 @@
           (let [[element remaining-remaining-bstr] (split-at-position remaining-bstr length)]
             (decode remaining-remaining-bstr (conj message element)))))
       (seq->map message))))
+
+(defn encode 
+  "transforms message seq into bencoded string"
+  [message]
+  "d2:ns9:cljs.user")

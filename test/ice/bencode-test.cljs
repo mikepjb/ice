@@ -18,3 +18,9 @@
 
 ;; TODO when implementing lists and inner dicts => try using pop to conj into
 ;; inner vecs e.g (let [new-val (conj (peek my-vec) my-val)] (conj (pop my-vec) new-val))
+
+(deftest encode
+  (testing "transforms message seq into bencoded string"
+    (is (= (bencode/encode [{:ns "cljs.user"}]) "d2:ns9:cljs.user"))
+    ;; (is (= (bencode/encode [{:ns "cljs.user" :eval "(def x 3)" :session "a-session-id"}])))
+    ))
