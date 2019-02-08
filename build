@@ -3,14 +3,18 @@
 cd $(dirname $BASH_SOURCE)
 BASE=$(pwd)
 
+echo '--> Compiling plugin from cljs->js'
 clj -m cljs.main --target node --output-to ice-plugin.js -O simple -c ice.core
 
+echo "--> Moving plugin into neovim's remote plugin path"
 mkdir -p ~/.config/nvim/rplugin/node
 ln -sfv $BASE/ice-plugin.js ~/.config/nvim/rplugin/node/ice-plugin.js
 # ln -sfv $BASE/ice-plugin.js ~/.config/nvim/rplugin/node/index.js
 
+echo '--> Execute :UpdateRemotePlugins in neovim'
 NVIM_NODE_LOG_FILE=node.log nvim +UpdateRemotePlugins +qall
 
+echo '--> Enjoy'
 cat node.log
 
 
