@@ -14,38 +14,46 @@
   []
   {:session-id "x"})
 
-(def client (new net/Socket))
+;; (def client (new net/Socket))
 
 (def log (atom []))
 
+(defn session-id
+  "collect session-id from log"
+  [retries]
+  (println (count @log))
+  (if (not= 0 (count @log))
+    (:new-session (last @log))
+    (if (< 99 retries) (recur (inc retries)))))
+
+(defn setup-connection [addr port]
+  (let [client (new net/Socket)]
+    (.connect
+      client port addr (fn [] (.write client (bencode/encode {:op "clone"}))))
+    (.on client "data"
+         (fn [response] (swap! log conj (bencode/decode (.toString response)))))
+    (.on client "close"
+         (fn [] (println "connection closed")))
+    {:client client
+     :session-id (session-id 0)}))
+
 (defn net-example []
-  (.connect
-    client
-    9999
-    "127.0.0.1"
-    (fn []
-      (.write client "d2:op5:clonee")
-      (println "Sending code for evaluation")
-      (when (contains? (last @log) :status)
-        (println "last log contains a status key.")
-        (let [last-message (last @log)
-              payload (str "d2:op4:eval4:code31:(def boot.user/special-value 5)7:session36:" (:new-session last-message) "e")]
-          (println payload)
-          (.write client payload)))))
+  (let [client (setup-connection "127.0.0.1" 9999)]
+    ;; (loop []
+    ;;   (if (= 1 (count @log))
+    ;;     (let [last-message (last @log)
+    ;;           payload (bencode/encode [{:op "eval"
+    ;;                                     :code "(def special-value 5)"
+    ;;                                     :session (:new-session last-message)
+    ;;                                     :ns "boot.user"}])]
+    ;;       (.write client payload))
+    ;;     (recur)))
+    ))
 
-  (.on
-    client
-    "data"
-    (fn [response]
-      (println "on method call.")
-      (swap! log conj (bencode/decode (.toString response)))
-      (println (bencode/decode (.toString response)))
-      ;; (.destroy client)
-      ))
-
-  (.on client "close" (fn [] (println "Connection closed")))
-
-  (when (contains? (last @log) :status)
-    (.destroy client))
-
-  )
+(defn send [client]
+  (let [last-message (last @log)
+        payload (bencode/encode [{:op "eval"
+                                  :code "(def special-value 5)"
+                                  :session (:new-session last-message)
+                                  :ns "boot.user"}])]
+    (.write client payload)))

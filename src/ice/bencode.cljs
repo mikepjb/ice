@@ -34,6 +34,7 @@
 (defn encode 
   "transforms message seq into bencoded string"
   [message]
-  (let [string-seq (map name (flatten (vec (first message))))
+  (let [_ (println (flatten (vec (first message))))
+        string-seq (map name (flatten (vec (first message))))
         bstr (reduce (fn [map-str x] (str map-str (str (count x) ":" x))) "" string-seq)]
     (str "d" bstr "e")))
